@@ -1,0 +1,4 @@
+- In plugin 'com.android.internal.version-check' type
+ 'com.android.build.gradle.tasks.PackageApplication' property
+  'signingConfigData.signingConfigData.storeFile' specifies
+   file '/Users/adriaanbakker/AndroidStudioProjects/mykeystore/keystore1' which doesn't exist.
