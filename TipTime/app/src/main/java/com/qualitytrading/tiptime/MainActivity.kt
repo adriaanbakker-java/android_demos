@@ -1,5 +1,6 @@
 package com.qualitytrading.tiptime
 
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -54,16 +55,17 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun EditNumberField(modifier: Modifier = Modifier) {
-        var amountInput by remember {mutableStateOf("0") }
+    fun EditNumberField(
+        value: String,
+        onValueChange: (String) -> Unit,
+        modifier: Modifier = Modifier) {
+
         TextField(
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             label = { Text(stringResource(R.string.bill_amount)) },
-            value = amountInput,
-            onValueChange = {
-                            amountInput = it
-            },
+            value = value,
+            onValueChange = onValueChange,
             modifier = modifier
         )
     }
@@ -72,21 +74,36 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun TipTimeLayout() {
+        var amountInput by remember { mutableStateOf("") }
+        val amount = amountInput.toDoubleOrNull() ?: 0.0
+        val tip = calculateTip(amount)
+
         Column() {
             Text(
-                text = stringResource(R.string.calculate_tip),
+                text = stringResource(R.string.tip_amount, tip),
                 modifier = Modifier
                     .padding(bottom = 16.dp, top = 40.dp)
                     .align(alignment = Alignment.Start)
             )
-            EditNumberField(modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth())
+            EditNumberField(
+                value = amountInput,
+                onValueChange = { amountInput = it },
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .fillMaxWidth()
+            )
             Text(
-                text = stringResource(R.string.tip_amount, "$0x.00"),
+                text = stringResource(R.string.tip_amount, tip),
                 style = MaterialTheme.typography.displaySmall
             )
             Spacer(modifier = Modifier.height(150.dp))
 
         }
+    }
+
+    private fun calculateTip(amount: Double, tipPercent: Double = 15.0): String {
+        val tip = tipPercent / 100 * amount
+        return NumberFormat.getCurrencyInstance().format(tip)
     }
 
 
