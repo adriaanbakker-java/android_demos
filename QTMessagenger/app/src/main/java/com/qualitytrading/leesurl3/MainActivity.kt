@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager.WakeLock
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Random
 import java.util.concurrent.Executors
 
 
@@ -23,17 +25,22 @@ class MainActivity : AppCompatActivity() {
 
     private val context: Context? = null
     private val mWakeLock: WakeLock? = null
+    private val btnTest: Button = findViewById(R.id.btnTest)
 
     private val myExecutor = Executors.newSingleThreadExecutor()
     private val myHandler = Handler(Looper.getMainLooper())
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         val myTextView = findViewById<TextView>(R.id.textView)
         var myInput = 55
 
+        btnTest.setOnClickListener {
+            myTextView.text = "button clicked"
+        }
         doMyTask(myTextView, myInput)
     }
 
