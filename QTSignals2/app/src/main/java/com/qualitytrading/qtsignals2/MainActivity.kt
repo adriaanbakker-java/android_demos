@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val rollButton = findViewById<Button>(R.id.btnTest)
+        val rollButton = findViewById<Button>(R.id.btnStartApp)
         val textview = findViewById<TextView>(R.id.textView)
 
 
@@ -48,10 +48,12 @@ class MainActivity : AppCompatActivity() {
                 override fun onTick(millisUntilFinished: Long) {
                     //textview.text = "tick:" + counter.toString()
                     counter++
+                    var minutes: Int = counter % 60;
+                    var hours: Int = ( counter / 60 ) % 60
+                    var days: Int = hours / 24
+                    rollButton.setText(days.toString() + ":" + hours.toString() + ":" + minutes.toString())
                     if (counter%20 == 0) {
-
                         getMsgFromURL(textview, counter)
-
                     }
                 }
 
