@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
 
-                setContent {
+                this@MainActivity.setContent {
                     SendNotificationTheme {
                         // A surface container using the 'background' color from the theme
                         Surface(
