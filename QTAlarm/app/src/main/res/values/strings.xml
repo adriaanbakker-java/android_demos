@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Stopwatch</string>
+    <string name="reset_stopwatch">Reset Stopwatch</string>
+    <string name="toggle_stopwatch">Toggle Stopwatch</string>
+    <string name="stopwatch">Stopwatch</string>
+
+    <string name="channel_name">com.qualitytrading.sendnotification</string>
+    <string name="channel_description">Stock notification</string>
+    <string name="CHANNEL_ID">STOCKNOTIFICATION</string>
+
+</resources>
