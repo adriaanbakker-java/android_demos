@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">QTSignals3</string>
+    <string name="channel_name">com.qualitytrading.sendnotification</string>
+    <string name="channel_description">Android notification</string>
+    <string name="CHANNEL_ID">CHANNEL_ID</string>
+
+</resources>
