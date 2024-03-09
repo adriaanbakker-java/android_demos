@@ -46,6 +46,7 @@ class StopwatchService : Service() {
 
     private var timeElapsed: Int = 0
     private var isStopWatchRunning = false
+    private var lastQTMessage = "none"
 
     private var updateTimer = Timer()
     private var stopwatchTimer = Timer()
@@ -143,8 +144,21 @@ class StopwatchService : Service() {
 
                 timeElapsed++
 
+
+                val seconds: Int = timeElapsed % 60
+                if (seconds == 10) {
+                    var newQTMessage = ""
+                    newQTMessage = getMsgFromURL();
+                    if (!newQTMessage.equals(lastQTMessage)) {
+                        lastQTMessage = newQTMessage
+                        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                        val r = RingtoneManager.getRingtone(applicationContext, notification)
+                        r.play()
+                    }
+                }
+                val tickmessage = lastQTMessage
                 stopwatchIntent.putExtra(TIME_ELAPSED, timeElapsed)
-                stopwatchIntent.putExtra(QTMESSAGE, "TICK MESSAGE")
+                stopwatchIntent.putExtra(QTMESSAGE, tickmessage)
                 sendBroadcast(stopwatchIntent)
             }
         }, 0, 1000)
@@ -255,7 +269,7 @@ class StopwatchService : Service() {
 
 
     private fun getMsgFromURL(
-    ): String? {
+    ): String {
         var connection: HttpURLConnection? = null
 
             var sUrl: String? = "http://www.qualitytradingsignals.com/message.txt"
@@ -287,7 +301,7 @@ class StopwatchService : Service() {
 
                 return content.toString();
             } catch (e: Exception) {
-                return  e.localizedMessage
+                return  "getMsgFromURL:" + e.localizedMessage
             }
     }
 }
