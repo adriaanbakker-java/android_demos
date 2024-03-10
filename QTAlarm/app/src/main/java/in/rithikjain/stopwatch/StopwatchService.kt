@@ -19,11 +19,13 @@ import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+import java.util.logging.Handler
 
 class StopwatchService : Service() {
     companion object {
         // Channel ID for notifications
         const val CHANNEL_ID = "Stopwatch_Notifications"
+        const val CHANNEL_STOCK_ID = "Stock Notifications"
 
         // Service Actions
         const val START = "START"
@@ -149,11 +151,17 @@ class StopwatchService : Service() {
                 if (seconds == 10) {
                     var newQTMessage = ""
                     newQTMessage = getMsgFromURL();
+                    var alarmURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+                    val r = RingtoneManager.getRingtone(applicationContext, alarmURI)
+                    r.stop();
                     if (!newQTMessage.equals(lastQTMessage)) {
                         lastQTMessage = newQTMessage
-                        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-                        val r = RingtoneManager.getRingtone(applicationContext, notification)
+
                         r.play()
+                        moveToBackground();
+                        moveToForeground();
+                        //notificationManager.notify(2, buildStockNotification(newQTMessage))
                     }
                 }
                 val tickmessage = lastQTMessage
@@ -241,11 +249,7 @@ class StopwatchService : Service() {
             .setContentTitle(title)
             .setOngoing(true)
             .setContentText(
-                "${"%02d".format(hours)}:${"%02d".format(minutes)}:${
-                    "%02d".format(
-                        seconds
-                    )
-                }"
+                "${"%02d".format(hours)}:${"%02d".format(minutes)}:${"%02d".format(seconds)}:{$lastQTMessage}"
             )
             .setColorized(true)
             .setColor(Color.parseColor("#BEAEE2"))
@@ -256,6 +260,27 @@ class StopwatchService : Service() {
             .build()
     }
 
+    /*
+    * This function is responsible for building and returning a Notification with the current
+    * state of the stopwatch along with the timeElapsed
+    * */
+    private fun buildStockNotification(aMessage: String ): Notification {
+        val title =
+            "STOCK MESSAGE"
+
+        val intent = Intent(this, MainActivity::class.java)
+        val pIntent = PendingIntent.getActivity(this, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE)
+
+        return NotificationCompat.Builder(this, CHANNEL_STOCK_ID)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
+            .setContentTitle(title)
+            .setContentText(aMessage)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pIntent)
+            .setAutoCancel(true)
+            .build()
+    }
 
     /*
     * This function uses the notificationManager to update the existing notification with the new notification
