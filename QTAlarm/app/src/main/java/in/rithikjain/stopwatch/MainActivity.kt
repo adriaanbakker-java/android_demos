@@ -89,9 +89,9 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateStopwatchValue(timeElapsed: Int, qtMessage: String?) {
-        val hours: Int = (timeElapsed / 60) / 60
-        val minutes: Int = timeElapsed / 60
-        val seconds: Int = timeElapsed % 60
+        val hours: Int = timeElapsed.div(60).div(60)
+        val minutes: Int = (timeElapsed - hours * 60 * 60).div(60)
+        val seconds: Int = timeElapsed.rem(60)
         binding.stopwatchValueTextView.text =
             "${"%02d".format(hours)}:${"%02d".format(minutes)}:${"%02d".format(seconds)}:${qtMessage}"
     }

@@ -238,7 +238,7 @@ class StopwatchService : Service() {
         }
 
         val hours: Int = timeElapsed.div(60).div(60)
-        val minutes: Int = timeElapsed.div(60)
+        val minutes: Int = (timeElapsed - hours * 60 * 60).div(60)
         val seconds: Int = timeElapsed.rem(60)
 
         val intent = Intent(this, MainActivity::class.java)
